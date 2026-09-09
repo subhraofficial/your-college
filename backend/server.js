@@ -5,6 +5,7 @@ dns.setServers(["8.8.8.8", "1.1.1.1"]);
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const mongoose = require("mongoose");
 const connectDB = require('./config/db');
 
 const app = express();
@@ -38,3 +39,33 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Health check endpoint
+app.get("/api/health", async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({
+        status: "error",
+        server: "online",
+        database: "disconnected"
+      });
+    }
+
+    await mongoose.connection.db.admin().ping();
+
+    res.status(200).json({
+      status: "ok",
+      server: "online",
+      database: "connected",
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error("Health check failed:", error.message);
+
+    res.status(503).json({
+      status: "error",
+      server: "online",
+      database: "disconnected"
+    });
+  }
+});
