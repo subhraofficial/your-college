@@ -7,6 +7,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require("mongoose");
 const connectDB = require('./config/db');
+const College = require('./models/College');
 
 const app = express();
 
@@ -24,6 +25,87 @@ app.use('/api/colleges', require('./routes/colleges'));
 app.use('/api/courses', require('./routes/courses'));
 app.use('/api/leads', require('./routes/leads'));
 app.use('/api/settings', require('./routes/settings'));
+
+// ================================
+// SEO - Dynamic XML Sitemap
+// ================================
+
+app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const colleges = await College.find(
+      { status: 'active' },
+      { slug: 1, updatedAt: 1 }
+    ).sort({ name: 1 });
+
+    const baseUrl = 'https://yourcollege.in';
+
+    const staticUrls = [
+      {
+        loc: `${baseUrl}/`,
+        priority: '1.0',
+        changefreq: 'weekly',
+      },
+      {
+        loc: `${baseUrl}/colleges`,
+        priority: '0.9',
+        changefreq: 'daily',
+      },
+      {
+        loc: `${baseUrl}/courses`,
+        priority: '0.8',
+        changefreq: 'weekly',
+      },
+      {
+        loc: `${baseUrl}/about`,
+        priority: '0.5',
+        changefreq: 'monthly',
+      },
+      {
+        loc: `${baseUrl}/contact`,
+        priority: '0.5',
+        changefreq: 'monthly',
+      },
+    ];
+
+    const collegeUrls = colleges
+      .filter((college) => college.slug)
+      .map((college) => ({
+        loc: `${baseUrl}/colleges/${college.slug}`,
+        lastmod: college.updatedAt
+          ? new Date(college.updatedAt).toISOString()
+          : undefined,
+        priority: '0.8',
+        changefreq: 'weekly',
+      }));
+
+    const urls = [...staticUrls, ...collegeUrls];
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
+${urls
+  .map(
+    (url) => `  <url>
+    <loc>${url.loc}</loc>
+    ${url.lastmod ? `<lastmod>${url.lastmod}</lastmod>` : ''}
+    <changefreq>${url.changefreq}</changefreq>
+    <priority>${url.priority}</priority>
+  </url>`
+  )
+  .join('\n')}
+</urlset>`;
+
+    res.header('Content-Type', 'application/xml');
+    res.send(xml);
+  } catch (error) {
+    console.error('Sitemap generation failed:', error.message);
+
+    res.status(500).send(
+      '<?xml version="1.0" encoding="UTF-8"?><error>Sitemap generation failed</error>'
+    );
+  }
+});
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'OK', message: 'Your College API is running' }));

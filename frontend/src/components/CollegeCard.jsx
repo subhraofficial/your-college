@@ -33,7 +33,7 @@ export default function CollegeCard({ college, onEnquire }) {
           )}
         </div>
         <div className="mt-auto flex gap-2">
-          <Link to={`/colleges/${college._id}`} className="flex-1 text-center bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
+          <Link to={`/colleges/${college.slug || college._id}`} className="flex-1 text-center bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">
             View Details
           </Link>
           <button

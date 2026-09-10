@@ -2,6 +2,13 @@ const mongoose = require('mongoose');
 
 const collegeSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
+  slug: {
+    type: String,
+    unique: true,
+    index: true,
+    lowercase: true,
+    trim: true,
+  },
   image: { type: String, default: '' },
   city: { type: String, trim: true },
   state: { type: String, trim: true },
