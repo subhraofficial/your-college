@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import SEO from '../components/SEO';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CollegeCard from '../components/CollegeCard';
@@ -46,7 +47,13 @@ export default function Colleges() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
+      <SEO
+        title="Explore Colleges"
+        description="Explore colleges and find the right college for your career goals. Search colleges by name, course and location."
+        path="/colleges"
+      />
+      <div className="min-h-screen flex flex-col">
       <Navbar />
       <section className="bg-blue-700 text-white py-12 px-4 text-center">
         <h1 className="text-3xl font-bold mb-2">Explore Colleges</h1>
@@ -92,6 +99,7 @@ export default function Colleges() {
       </section>
       <Footer />
       <EnquiryModal show={showEnquiry} onClose={() => setShowEnquiry(false)} preselectedCollege={selectedCollege} />
-    </div>
+      </div>
+    </>
   );
 }

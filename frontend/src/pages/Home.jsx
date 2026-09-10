@@ -1,3 +1,4 @@
+import SEO from '../components/SEO';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -32,7 +33,36 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
+      <SEO
+        title="Find the Right College for Your Future"
+        description="Explore colleges, courses, admission information and career guidance with Your College. Find the right college and course for your future."
+        path="/"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@graph': [
+            {
+              '@type': 'EducationalOrganization',
+              name: 'Your College',
+              url: 'https://yourcollege.in/',
+            },
+            {
+              '@type': 'WebSite',
+              name: 'Your College',
+              url: 'https://yourcollege.in/',
+              potentialAction: {
+                '@type': 'SearchAction',
+                target: {
+                  '@type': 'EntryPoint',
+                  urlTemplate: 'https://yourcollege.in/colleges?search={search_term_string}',
+                },
+                'query-input': 'required name=search_term_string',
+              },
+            },
+          ],
+        }}
+      />
+      <div className="min-h-screen flex flex-col">
       <Navbar />
 
       {/* Hero */}
@@ -160,6 +190,7 @@ export default function Home() {
 
       <Footer />
       <EnquiryModal show={showEnquiry} onClose={() => setShowEnquiry(false)} preselectedCollege={selectedCollege} />
-    </div>
+      </div>
+    </>
   );
 }

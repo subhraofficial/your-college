@@ -1,3 +1,4 @@
+import SEO from '../components/SEO';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -21,7 +22,27 @@ export default function CollegeDetail() {
   if (!college) return <div className="flex flex-col items-center justify-center min-h-screen"><p className="text-gray-500">College not found.</p><Link to="/colleges" className="mt-4 btn-primary">Back to Colleges</Link></div>;
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
+      <SEO
+        title={`${college.name} - Admission, Courses, Fees & Eligibility`}
+        description={`Get information about ${college.name}, including courses, admission details, eligibility, fees and location.`}
+        path={`/colleges/${college._id}`}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'CollegeOrUniversity',
+          name: college.name,
+          url: `https://yourcollege.in/colleges/${college._id}`,
+          description: college.description || undefined,
+          image: college.image || undefined,
+          address: college.location
+            ? {
+                '@type': 'PostalAddress',
+                addressLocality: college.location,
+              }
+            : undefined,
+        }}
+      />
+      <div className="min-h-screen flex flex-col">
       <Navbar />
       <div className="max-w-5xl mx-auto w-full px-4 py-8 flex-1">
         <Link to="/colleges" className="inline-flex items-center gap-1 text-blue-600 hover:underline text-sm mb-6">
@@ -113,6 +134,7 @@ export default function CollegeDetail() {
       </div>
       <Footer />
       <EnquiryModal show={showEnquiry} onClose={() => setShowEnquiry(false)} preselectedCollege={college.name} />
-    </div>
+      </div>
+    </>
   );
 }

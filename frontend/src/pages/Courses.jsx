@@ -1,3 +1,4 @@
+import SEO from '../components/SEO';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -21,7 +22,13 @@ export default function Courses() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
+      <SEO
+        title="Courses"
+        description="Explore undergraduate and postgraduate courses, eligibility, duration and career-focused course information with Your College."
+        path="/courses"
+      />
+      <div className="min-h-screen flex flex-col">
       <Navbar />
       <section className="bg-blue-700 text-white py-12 px-4 text-center">
         <h1 className="text-3xl font-bold mb-2">Explore Courses</h1>
@@ -76,6 +83,7 @@ export default function Courses() {
       </section>
       <Footer />
       <EnquiryModal show={showEnquiry} onClose={() => setShowEnquiry(false)} preselectedCollege="" />
-    </div>
+      </div>
+    </>
   );
 }

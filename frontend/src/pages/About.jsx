@@ -1,10 +1,17 @@
+import SEO from '../components/SEO';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { HiOutlineLightBulb, HiOutlineAcademicCap, HiOutlineUsers } from 'react-icons/hi';
 
 export default function About() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
+      <SEO
+        title="About Your College"
+        description="Learn about Your College, our mission and how we help students explore colleges, courses and admission opportunities."
+        path="/about"
+      />
+      <div className="min-h-screen flex flex-col">
       <Navbar />
       <section className="bg-blue-700 text-white py-12 px-4 text-center">
         <h1 className="text-3xl font-bold mb-2">About Your College</h1>
@@ -50,6 +57,7 @@ export default function About() {
         </div>
       </section>
       <Footer />
-    </div>
+      </div>
+    </>
   );
 }

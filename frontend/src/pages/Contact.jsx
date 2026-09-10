@@ -1,3 +1,4 @@
+import SEO from '../components/SEO';
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -24,7 +25,13 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <>
+      <SEO
+        title="Contact Your College"
+        description="Contact Your College for college selection, course information and admission guidance."
+        path="/contact"
+      />
+      <div className="min-h-screen flex flex-col">
       <Navbar />
       <section className="bg-blue-700 text-white py-12 px-4 text-center">
         <h1 className="text-3xl font-bold mb-2">Contact Us</h1>
@@ -41,7 +48,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900">Phone</p>
-                  <p className="text-gray-600">+91 98765 43210</p>
+                  <p className="text-gray-600">+91 97354 45579</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
@@ -59,7 +66,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="font-semibold text-gray-900">Address</p>
-                  <p className="text-gray-600">New Delhi, India</p>
+                  <p className="text-gray-600">Kolkata, West Bengal</p>
                 </div>
               </div>
             </div>
@@ -101,6 +108,7 @@ export default function Contact() {
         </div>
       </section>
       <Footer />
-    </div>
+      </div>
+    </>
   );
 }
