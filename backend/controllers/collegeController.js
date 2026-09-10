@@ -1,6 +1,7 @@
 const College = require('../models/College');
 const mongoose = require('mongoose');
 const slugify = require('../utils/slugify');
+const { submitToIndexNow } = require('../utils/indexNow');
 
 
 // ======================================================
@@ -125,6 +126,11 @@ exports.createCollege = async (req, res) => {
     }
 
     const college = await College.create(data);
+    if (college.slug && college.status === 'active') {
+  submitToIndexNow([
+    `https://yourcollege.in/colleges/${college.slug}`,
+  ]);
+}
 
     res.status(201).json({
       success: true,
@@ -190,6 +196,12 @@ exports.updateCollege = async (req, res) => {
         runValidators: true
       }
     );
+
+    if (college?.slug) {
+      submitToIndexNow([
+        `https://yourcollege.in/colleges/${college.slug}`,
+      ]);
+    }
 
     res.json({
       success: true,
